@@ -58,6 +58,8 @@ public class DataBaseService implements IDataBaseService {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            dataBaseConnection.closeAll(tableRs, null, connection);
         }
 
         return modelInfos;
