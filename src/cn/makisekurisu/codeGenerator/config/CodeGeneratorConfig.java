@@ -1,5 +1,6 @@
 package cn.makisekurisu.codeGenerator.config;
 
+import cn.makisekurisu.codeGenerator.bean.codeFile.CodeFileInfo;
 import cn.makisekurisu.util.StringUtil;
 
 import java.util.HashSet;
@@ -367,7 +368,9 @@ public class CodeGeneratorConfig {
      * 配置生成util的默认类
      * */
     private void setDefaultGeneratedClassesForUtil() {
-        defaultGeneratedClasses.beanUtilFileInfo.setPackageName(getCompleteUtilPackageName());
+        for(CodeFileInfo utilCodeFileInfo : defaultGeneratedClasses.utilClasses) {
+            utilCodeFileInfo.setPackageName(getCompleteUtilPackageName());
+        }
     }
 
     public DefaultGeneratedClasses getDefaultGeneratedClasses() {
