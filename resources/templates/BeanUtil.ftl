@@ -10,7 +10,6 @@ import java.util.Map;
 
 
 /**
- * @author zx
  *
  * 处理符合javabean规范的对象
  * */
