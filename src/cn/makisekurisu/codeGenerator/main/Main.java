@@ -3,6 +3,7 @@ package cn.makisekurisu.codeGenerator.main;
 import cn.makisekurisu.codeGenerator.service.main.ICodeGeneratorService;
 import cn.makisekurisu.codeGenerator.service.main.generator.classFile.impl.DtoGenerator;
 import cn.makisekurisu.codeGenerator.service.main.generator.classFile.impl.ModelGenerator;
+import cn.makisekurisu.codeGenerator.service.main.generator.iservice.IServiceGenerator;
 import cn.makisekurisu.codeGenerator.service.main.generator.mapper.MapperGenerator;
 import cn.makisekurisu.codeGenerator.service.main.generator.mapperXml.MapperXmlGenerator;
 import cn.makisekurisu.codeGenerator.service.main.generator.util.UtilGenerator;
@@ -28,5 +29,6 @@ public class Main {
         codeGeneratorService.addGenerator(new MapperGenerator());
         codeGeneratorService.addGenerator(new MapperXmlGenerator());
         codeGeneratorService.addGenerator(new UtilGenerator());
+        codeGeneratorService.addGenerator(new IServiceGenerator());
     }
 }
