@@ -1,11 +1,7 @@
 package cn.makisekurisu.codeGenerator.bean.codeFile.classFile;
 
-import cn.makisekurisu.codeGenerator.bean.codeFile.CodeFileInfo;
-
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by ym on 2017/2/21 0021.
@@ -14,13 +10,8 @@ import java.util.Set;
  *
  * 该模板用于在单个文件中生成单个类
  */
-public class ClassFileInfo extends CodeFileInfo {
+public class ClassFileInfo extends BaseClassFileInfo {
     private static final String DEFAULT_TEMPLATE_NAME = "classFile.ftl";
-
-    /**
-     * import信息
-     * */
-    private Set<String> importInfos = new HashSet<String>();
 
     /**
      * 类注释
@@ -36,11 +27,6 @@ public class ClassFileInfo extends CodeFileInfo {
      * 非访问控制修饰符
      * */
     private String nonAccessControlModifier;
-
-    /**
-     * 类名
-     * */
-    private String className;
 
     /**
      * 继承的类
@@ -100,14 +86,6 @@ public class ClassFileInfo extends CodeFileInfo {
         this.nonAccessControlModifier = nonAccessControlModifier;
     }
 
-    public String getClassName() {
-        return className;
-    }
-
-    public void setClassName(String className) {
-        this.className = className;
-    }
-
     public String getExtendsClassName() {
         return extendsClassName;
     }
@@ -132,14 +110,6 @@ public class ClassFileInfo extends CodeFileInfo {
         this.customContent = customContent;
     }
 
-    public Set<String> getImportInfos() {
-        return importInfos;
-    }
-
-    public void setImportInfos(Set<String> importInfos) {
-        this.importInfos = importInfos;
-    }
-
     public List<VariableInfo> getVariableInfos() {
         return variableInfos;
     }
@@ -154,14 +124,6 @@ public class ClassFileInfo extends CodeFileInfo {
 
     public void setMethodInfos(List<MethodInfo> methodInfos) {
         this.methodInfos = methodInfos;
-    }
-
-    public void addImportInfo(String importInfo) {
-        importInfos.add(importInfo);
-    }
-
-    public void removeImportInfo(String importInfo) {
-        importInfos.remove(importInfo);
     }
 
     public void addVariableInfo(VariableInfo variableInfo) {

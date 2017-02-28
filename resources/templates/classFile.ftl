@@ -4,20 +4,20 @@ package ${packageName};
 import ${importInfo};
 </#list>
 
-<#if comment?exists>${comment}</#if>
+<#if comment?exists>/**${comment}*/</#if>
 <#list annotations as annotation>
 ${annotation}
 </#list>
 <#if accessControlModifier?exists>${accessControlModifier} </#if><#if nonAccessControlModifier?exists>${nonAccessControlModifier} </#if>class <#if className?exists>${className}</#if><#if extendsClassName?exists> extends ${extendsClassName}</#if><#if (interfaces?size>0)> implements<#list interfaces as interface> ${interface}<#if (interface?has_next)>,</#if></#list></#if> {
     <#list variableInfos as variableInfo>
-        <#if (variableInfo.comment?exists)>${variableInfo.comment}</#if>
+        <#if (variableInfo.comment?exists)>/**${variableInfo.comment}*/</#if>
         <#list variableInfo.annotations as annotation>
         ${annotation}
         </#list>
         <#if (variableInfo.accessControlModifier?exists)>${variableInfo.accessControlModifier} </#if><#if (variableInfo.isStatic)>static </#if><#if (variableInfo.nonAccessControlModifier?exists)>${variableInfo.nonAccessControlModifier} </#if>${variableInfo.type} ${variableInfo.name}<#if (variableInfo.value?exists)> = ${variableInfo.value}</#if>;
     </#list>
     <#list methodInfos as methodInfo>
-        <#if (methodInfo.comment?exists)>${methodInfo.comment}</#if>
+        <#if (methodInfo.comment?exists)>/**${methodInfo.comment}*/</#if>
         <#list methodInfo.annotations as annotation>
         ${annotation}
         </#list>
