@@ -6,6 +6,7 @@ import cn.makisekurisu.codeGenerator.bean.codeFile.classFile.ClassFileInfo;
 import cn.makisekurisu.codeGenerator.config.CodeGeneratorConfig;
 import cn.makisekurisu.codeGenerator.config.ConfigLoader;
 import cn.makisekurisu.codeGenerator.service.main.generator.classFile.JavaBeanGenerator;
+import cn.makisekurisu.util.StringUtil;
 
 import java.util.List;
 
@@ -27,10 +28,11 @@ public class ModelGenerator extends JavaBeanGenerator {
         ClassFileInfo classFileInfo = new ClassFileInfo();
 
         classFileInfo.setPackageName(modelInfo.getPackageName());
-        classFileInfo.setComment(modelInfo.getComment());
+        if(StringUtil.isNullOrEmpty(modelInfo.getComment()))
+            classFileInfo.setComment(modelInfo.getComment());
         classFileInfo.setAccessControlModifier(PUBLIC_ACM);
         classFileInfo.setClassName(modelInfo.getModelName());
-        classFileInfo.setFileName(String.format(JAVA_FILE_NAME_FORMAT, classFileInfo.getClassName()));
+        classFileInfo.setFileName(formatJavaFileName(classFileInfo.getClassName()));
 
         // 默认实现Serializable接口
         implementSerializable(classFileInfo);

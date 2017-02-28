@@ -18,7 +18,7 @@ import java.util.List;
  * Created by ym on 2017/2/22 0022.
  */
 public class DtoGenerator extends JavaBeanGenerator {
-    private static final String DTO_SUFFIX = "DTO";
+    private static final String DEFAULT_DTO_NAME_FORMAT = "%sDTO";
 
     private static final String TO_MODEL_METHOD_BODY_FORMAT = "%s model = new %s();\n\t\t\tBeanUtil.convert(this, model);\n\t\t\treturn model;";
 
@@ -43,8 +43,8 @@ public class DtoGenerator extends JavaBeanGenerator {
 
         classFileInfo.setPackageName(config.getCompleteDtoPackageName());
         classFileInfo.setAccessControlModifier(PUBLIC_ACM);
-        classFileInfo.setClassName(modelInfo.getModelName().concat(DTO_SUFFIX));
-        classFileInfo.setFileName(String.format(JAVA_FILE_NAME_FORMAT, classFileInfo.getClassName()));
+        classFileInfo.setClassName(formatDtoName(modelInfo.getModelName()));
+        classFileInfo.setFileName(formatJavaFileName(classFileInfo.getClassName()));
 
         // 默认实现Serializable接口
         implementSerializable(classFileInfo);
@@ -84,5 +84,9 @@ public class DtoGenerator extends JavaBeanGenerator {
         toModelMethod.setMethodBody(String.format(TO_MODEL_METHOD_BODY_FORMAT, modelInfo.getModelName(), modelInfo.getModelName()));
 
         classFileInfo.addMethodInfo(toModelMethod);
+    }
+
+    public static String formatDtoName(String modelName) {
+        return String.format(DEFAULT_DTO_NAME_FORMAT, modelName);
     }
 }

@@ -22,7 +22,9 @@ public abstract class JavaBeanGenerator extends AbstractClassFileGenerator {
     protected VariableInfo generateBeanProperty(FieldInfo fieldInfo) {
         VariableInfo variableInfo = new VariableInfo();
 
-        variableInfo.setComment(fieldInfo.getComment());
+        if(StringUtil.isNullOrEmpty(fieldInfo.getComment()))
+            variableInfo.setComment(fieldInfo.getComment());
+
         variableInfo.setAccessControlModifier(PRIVATE_ACM);
         variableInfo.setType(fieldInfo.getJavaType().getSimpleName());
         variableInfo.setName(fieldInfo.getFieldName());
