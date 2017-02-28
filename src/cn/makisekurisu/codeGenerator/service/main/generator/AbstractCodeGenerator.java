@@ -79,4 +79,11 @@ public abstract class AbstractCodeGenerator implements CodeGenerator {
      * 创建代码生成器文件
      * */
     protected abstract List<? extends CodeFileInfo> createCodeFiles(List<ModelInfo> modelInfos, CodeGeneratorConfig generatorConfig);
+
+    /**
+     * 格式化文件名
+     * */
+    public static String formatJavaFileName(String className) {
+        return String.format(JAVA_FILE_NAME_FORMAT, className);
+    }
 }
