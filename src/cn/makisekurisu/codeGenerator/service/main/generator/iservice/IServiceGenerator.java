@@ -6,9 +6,8 @@ import cn.makisekurisu.codeGenerator.bean.codeFile.CodeFileInfo;
 import cn.makisekurisu.codeGenerator.bean.codeFile.IServiceFileInfo;
 import cn.makisekurisu.codeGenerator.config.CodeGeneratorConfig;
 import cn.makisekurisu.codeGenerator.config.ConfigLoader;
-import cn.makisekurisu.codeGenerator.service.main.generator.AbstractCodeGenerator;
+import cn.makisekurisu.codeGenerator.service.main.generator.BaseClassFileGenerator;
 import cn.makisekurisu.util.StringUtil;
-import cn.makisekurisu.util.TypeUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,10 +15,8 @@ import java.util.List;
 /**
  * Created by ym on 2017/2/27 0027.
  */
-public class IServiceGenerator extends AbstractCodeGenerator {
+public class IServiceGenerator extends BaseClassFileGenerator {
     private static final String DEFAULT_ISERVICE_NAME_FORMAT = "I%sService";
-
-    private static final String DEFAULT_FILE_NAME_FORMAT = DEFAULT_ISERVICE_NAME_FORMAT.concat(".java");
 
     @Override
     protected boolean whetherToGenerateCode(List<ModelInfo> modelInfos, ConfigLoader configLoader) {
@@ -29,7 +26,6 @@ public class IServiceGenerator extends AbstractCodeGenerator {
 
     @Override
     protected List<? extends CodeFileInfo> createCodeFiles(List<ModelInfo> modelInfos, CodeGeneratorConfig generatorConfig) {
-        System.out.println("创建service");
         List<IServiceFileInfo> iServiceFileInfos = new ArrayList<IServiceFileInfo>(modelInfos.size());
 
         for(ModelInfo modelInfo : modelInfos)
@@ -42,8 +38,8 @@ public class IServiceGenerator extends AbstractCodeGenerator {
         IServiceFileInfo iServiceFileInfo = new IServiceFileInfo();
 
         iServiceFileInfo.setPackageName(generatorConfig.getCompleteServicePackageName());
-        iServiceFileInfo.setiServiceName(String.format(DEFAULT_ISERVICE_NAME_FORMAT, modelInfo.getModelName()));
-        iServiceFileInfo.setFileName(String.format(DEFAULT_FILE_NAME_FORMAT, modelInfo.getModelName()));
+        iServiceFileInfo.setClassName(formatIServiceName(modelInfo.getModelName()));
+        iServiceFileInfo.setFileName(formatJavaFileName(iServiceFileInfo.getClassName()));
         iServiceFileInfo.setModelInfo(modelInfo);
 
         iServiceFileInfo.addImportInfo(StringUtil.concatStrs(modelInfo.getPackageName(), DOT_DEL, modelInfo.getModelName()));
@@ -53,11 +49,8 @@ public class IServiceGenerator extends AbstractCodeGenerator {
         return iServiceFileInfo;
     }
 
-    // 判断model的主键类型有没有需要import
-    private void handlePrimaryKeys(IServiceFileInfo mapperFileInfo, List<FieldInfo> primaryKeys) {
-        for(FieldInfo primaryKey : primaryKeys) {
-            if(!TypeUtil.isInLangPackage(primaryKey.getJavaType()))
-                mapperFileInfo.addImportInfo(primaryKey.getJavaType().getTypeName());
-        }
+    public static String formatIServiceName(String modelName) {
+        return String.format(DEFAULT_ISERVICE_NAME_FORMAT, modelName);
     }
+
 }
