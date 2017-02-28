@@ -107,6 +107,11 @@ public class CodeGeneratorConfig {
     private String controllerPackageName;
 
     /**
+     * controllerRequestMapping使用的前缀名
+     * */
+    private String controllerRequestMappingPrefix;
+
+    /**
      * 是否生成util
      * */
     private boolean utilFlag;
@@ -191,6 +196,8 @@ public class CodeGeneratorConfig {
 
     public void setDtoPackageName(String dtoPackageName) {
         this.dtoPackageName = dtoPackageName;
+
+        setDefaultGeneratedClassesForDto();
     }
 
     public boolean getMapperFlag() {
@@ -298,6 +305,14 @@ public class CodeGeneratorConfig {
         setDefaultGeneratedClassesForUtil();
     }
 
+    public String getControllerRequestMappingPrefix() {
+        return controllerRequestMappingPrefix;
+    }
+
+    public void setControllerRequestMappingPrefix(String controllerRequestMappingPrefix) {
+        this.controllerRequestMappingPrefix = controllerRequestMappingPrefix;
+    }
+
     public String getCompleteModelPackageName() {
         if(StringUtil.isNullOrEmptyForMultiStr(basePackageName, modelPackageName))
             return modelPackageName;
@@ -370,6 +385,15 @@ public class CodeGeneratorConfig {
     private void setDefaultGeneratedClassesForUtil() {
         for(CodeFileInfo utilCodeFileInfo : defaultGeneratedClasses.utilClasses) {
             utilCodeFileInfo.setPackageName(getCompleteUtilPackageName());
+        }
+    }
+
+    /**
+     * 配置生成dto的默认类
+     * */
+    private void setDefaultGeneratedClassesForDto() {
+        for(CodeFileInfo dtoCodeFileInfo : defaultGeneratedClasses.dtoClasses) {
+            dtoCodeFileInfo.setPackageName(getCompleteDtoPackageName());
         }
     }
 
