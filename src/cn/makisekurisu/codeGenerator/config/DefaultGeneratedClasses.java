@@ -20,10 +20,17 @@ public class DefaultGeneratedClasses {
 
     public final StringUtilFileInfo stringUtilFileInfo = new StringUtilFileInfo();
 
+    public final ResponseUtilFileInfo responseUtilFileInfo = new ResponseUtilFileInfo();
+
     public final List<CodeFileInfo> utilClasses = new ArrayList<CodeFileInfo>();
+
+    public final LimitShowDTOFileInfo limitShowDTOFileInfo = new LimitShowDTOFileInfo();
+
+    public final List<CodeFileInfo> dtoClasses = new ArrayList<CodeFileInfo>();
 
     public DefaultGeneratedClasses() {
         initUitlClasses();
+        initDtoClasses();
     }
 
     private void initUitlClasses() {
@@ -31,5 +38,10 @@ public class DefaultGeneratedClasses {
         utilClasses.add(sqlUtilFileInfo);
         utilClasses.add(dateUtilFileInfo);
         utilClasses.add(stringUtilFileInfo);
+        utilClasses.add(responseUtilFileInfo);
+    }
+
+    private void initDtoClasses() {
+        dtoClasses.add(limitShowDTOFileInfo);
     }
 }
