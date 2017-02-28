@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import ${importInfo};
 </#list>
 
-public interface ${mapperName} {
+public interface ${className} {
     int deleteByPrimaryKey(<#list modelInfo.primaryKeys as primaryKey>@Param("${primaryKey.fieldName}") ${primaryKey.javaType.simpleName} ${primaryKey.fieldName}<#if primaryKey?has_next>, </#if></#list>);
 
     int insert(${modelInfo.modelName} record);
@@ -27,7 +27,7 @@ public interface ${mapperName} {
 
     long count(@Param("parameters") String parameters, @Param("condition") String condition, @Param("isDistinct") boolean isDistinct);
 
-    ${modelInfo.modelName} findModel(<#list modelInfo.primaryKeys as primaryKey>@Param("${primaryKey.fieldName}") ${primaryKey.javaType.simpleName} ${primaryKey.fieldName}<#if primaryKey?has_next>, </#if></#list>, @Param("parameters") String parameters);
+    ${modelInfo.modelName} findModel(<#if (modelInfo.primaryKeys?size>0)><#list modelInfo.primaryKeys as primaryKey>@Param("${primaryKey.fieldName}") ${primaryKey.javaType.simpleName} ${primaryKey.fieldName}<#if primaryKey?has_next>, </#if></#list>, </#if>@Param("parameters") String parameters);
 
-    Map<String, Object> findMap(<#list modelInfo.primaryKeys as primaryKey>@Param("${primaryKey.fieldName}") ${primaryKey.javaType.simpleName} ${primaryKey.fieldName}<#if primaryKey?has_next>, </#if></#list>, @Param("parameters") String parameters);
+    Map<String, Object> findMap(<#if (modelInfo.primaryKeys?size>0)><#list modelInfo.primaryKeys as primaryKey>@Param("${primaryKey.fieldName}") ${primaryKey.javaType.simpleName} ${primaryKey.fieldName}<#if primaryKey?has_next>, </#if></#list>, </#if>@Param("parameters") String parameters);
 }
