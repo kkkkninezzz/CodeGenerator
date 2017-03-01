@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+<#if (modelInfo.primaryKeys?size==1)>
+import org.springframework.web.bind.annotation.RequestParam;
+</#if>
 
 <#list importInfos as importInfo>
 import ${importInfo};
@@ -46,9 +49,9 @@ public class ${className} {
 
     @RequestMapping(value = "<#if (modelInfo.primaryKeys?size>0)>/<#list modelInfo.primaryKeys as primaryKey>{${primaryKey.fieldName}}<#if primaryKey?has_next>/</#if></#list></#if>", method = RequestMethod.GET)
     public ResponseEntity<String> show(<#list modelInfo.primaryKeys as primaryKey>@PathVariable("${primaryKey.fieldName}") ${primaryKey.javaType.simpleName} ${primaryKey.fieldName}<#if primaryKey?has_next>, </#if></#list>) {
-        Map<String, Object> ${modelInfo.modelName?uncap_first} = ${serviceName}.findMap(<#list modelInfo.primaryKeys as primaryKey>${primaryKey.fieldName}<#if primaryKey?has_next>, </#if></#list>);
+        Map<String, Object> ${modelInfo.modelName?uncap_first}Model = ${serviceName}.findMap(<#list modelInfo.primaryKeys as primaryKey>${primaryKey.fieldName}<#if primaryKey?has_next>, </#if></#list>);
 
-        return ResponseUtil.getResEntityForGetAndJson(${modelInfo.modelName?uncap_first});
+        return ResponseUtil.getResEntityForGetAndJson(${modelInfo.modelName?uncap_first}Model);
     }
 
     @RequestMapping(value = "", method = RequestMethod.POST)
@@ -58,9 +61,9 @@ public class ${className} {
         if(errors.hasErrors())
             return ResponseUtil.getResponseEntityWhenInvalidReqParams();
 
-        ${modelInfo.modelName} ${modelInfo.modelName?uncap_first} = ${dtoName?uncap_first}.toModel();
+        ${modelInfo.modelName} ${modelInfo.modelName?uncap_first}Model = ${dtoName?uncap_first}.toModel();
 
-        return ResponseUtil.getResEntityForPPP(${serviceName}.save(${modelInfo.modelName?uncap_first}));
+        return ResponseUtil.getResEntityForPPP(${serviceName}.save(${modelInfo.modelName?uncap_first}Model));
     }
 
     @RequestMapping(value = "<#if (modelInfo.primaryKeys?size>0)>/<#list modelInfo.primaryKeys as primaryKey>{${primaryKey.fieldName}}<#if primaryKey?has_next>/</#if></#list></#if>", method = RequestMethod.PUT)
@@ -68,15 +71,23 @@ public class ${className} {
         @Validated
         ${dtoName} ${dtoName?uncap_first}, BindingResult errors) {
 
-        ${modelInfo.modelName} ${modelInfo.modelName?uncap_first} = ${dtoName?uncap_first}.toModel();
+        ${modelInfo.modelName} ${modelInfo.modelName?uncap_first}Model = ${dtoName?uncap_first}.toModel();
         <#list modelInfo.primaryKeys as primaryKey>
-        ${modelInfo.modelName?uncap_first}.set${primaryKey.fieldName?cap_first}(${primaryKey.fieldName});
+        ${modelInfo.modelName?uncap_first}Model.set${primaryKey.fieldName?cap_first}(${primaryKey.fieldName});
         </#list>
-        return ResponseUtil.getResEntityForPPP(${serviceName}.update(${modelInfo.modelName?uncap_first}));
+        return ResponseUtil.getResEntityForPPP(${serviceName}.update(${modelInfo.modelName?uncap_first}Model));
     }
 
     @RequestMapping(value = "<#if (modelInfo.primaryKeys?size>0)>/<#list modelInfo.primaryKeys as primaryKey>{${primaryKey.fieldName}}<#if primaryKey?has_next>/</#if></#list></#if>", method = RequestMethod.DELETE)
     public ResponseEntity<String> destory(<#list modelInfo.primaryKeys as primaryKey>@PathVariable("${primaryKey.fieldName}") ${primaryKey.javaType.simpleName} ${primaryKey.fieldName}<#if primaryKey?has_next>, </#if></#list>) {
         return ResponseUtil.getResEntityForDel(${serviceName}.delete(<#list modelInfo.primaryKeys as primaryKey>${primaryKey.fieldName}<#if primaryKey?has_next>, </#if></#list>));
     }
+
+    <#-- 如果是单主键则生成批量删除 -->
+    <#if (modelInfo.primaryKeys?size==1)>
+    @RequestMapping(value = "/deletes", method = RequestMethod.DELETE)
+    public ResponseEntity<String> deletes(@RequestParam("primaryKeys[]") <#list modelInfo.primaryKeys as primaryKey>${primaryKey.javaType.simpleName}[] primaryKeys</#list>) {
+        return ResponseUtil.getResEntityForDel(${serviceName}.batchDelete(primaryKeys));
+    }
+    </#if>
 }

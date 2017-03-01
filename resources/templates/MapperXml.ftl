@@ -32,7 +32,7 @@
     </select>
 
     <delete id="deleteByPrimaryKey" >
-        delete from charge_standard
+        delete from ${modelInfo.dbTableName}
         from ${modelInfo.dbTableName}
         <#if (modelInfo.primaryKeys?size>0)>
         where
@@ -42,6 +42,17 @@
         </#list>
         </#if>
     </delete>
+
+    <#-- 如果是单主键则生成批量删除 -->
+    <#if (modelInfo.primaryKeys?size==1)>
+    <delete id="deleteByPrimaryKeys" >
+        delete from ${modelInfo.dbTableName}
+        from ${modelInfo.dbTableName}
+        <#list modelInfo.primaryKeys as primaryKey>
+        where <foreach collection="primaryKeys" item = "primaryKey" separator=" or " >${primaryKey.dbFieldName} = <@mapperEl "primaryKey," + "jdbcType=" + primaryKey.dbType /></foreach>
+        </#list>
+    </delete>
+    </#if>
 
     <insert id="insert" parameterType="${modelInfo.packageName}.${modelInfo.modelName}" >
         insert into ${modelInfo.dbTableName} (

@@ -31,6 +31,14 @@ public class ${className} implements ${serviceInterfaceName} {
         return ${mapperName?uncap_first}.deleteByPrimaryKey(<#list modelInfo.primaryKeys as primaryKey>${primaryKey.fieldName}<#if primaryKey?has_next>, </#if></#list>) > 0;
     }
 
+    <#-- 如果是单主键则生成批量删除 -->
+    <#if (modelInfo.primaryKeys?size==1)>
+    @Override
+    public boolean batchDelete(<#list modelInfo.primaryKeys as primaryKey>${primaryKey.javaType.simpleName}[] primaryKeys</#list>) {
+        return ${mapperName?uncap_first}.deleteByPrimaryKeys(primaryKeys) > 0;
+    }
+    </#if>
+
     @Override
     public ${modelInfo.modelName} findModel(<#list modelInfo.primaryKeys as primaryKey>${primaryKey.javaType.simpleName} ${primaryKey.fieldName}<#if primaryKey?has_next>, </#if></#list>) {
         return ${mapperName?uncap_first}.selectByPrimaryKey(<#list modelInfo.primaryKeys as primaryKey>${primaryKey.fieldName}<#if primaryKey?has_next>, </#if></#list>);

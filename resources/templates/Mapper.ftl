@@ -11,6 +11,11 @@ import ${importInfo};
 public interface ${className} {
     int deleteByPrimaryKey(<#list modelInfo.primaryKeys as primaryKey>@Param("${primaryKey.fieldName}") ${primaryKey.javaType.simpleName} ${primaryKey.fieldName}<#if primaryKey?has_next>, </#if></#list>);
 
+    <#-- 如果是单主键则生成批量删除 -->
+    <#if (modelInfo.primaryKeys?size==1)>
+    int deleteByPrimaryKeys(@Param("primaryKeys")<#list modelInfo.primaryKeys as primaryKey> ${primaryKey.javaType.simpleName}[] primaryKeys</#list>);
+    </#if>
+
     int insert(${modelInfo.modelName} record);
 
     int insertSelective(${modelInfo.modelName} record);
