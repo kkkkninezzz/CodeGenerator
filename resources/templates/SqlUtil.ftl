@@ -14,6 +14,8 @@ public class SqlUtil {
      * @return 格式化结果
      */
     public static String formatParameters(String... parameters) {
+        if(parameters == null || parameters.length == 0)
+            return null;
         StringBuilder stringBuilder = new StringBuilder();
 
         stringBuilder.append(parameters[0]);
@@ -31,6 +33,8 @@ public class SqlUtil {
      * @return 格式化结果
      */
     public static String formatParametersForAlias(String[]... parameters) {
+        if(parameters == null || parameters.length == 0)
+            return null;
         StringBuilder stringBuilder = new StringBuilder();
 
         formatParameter(stringBuilder, parameters[0]);
