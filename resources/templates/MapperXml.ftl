@@ -33,7 +33,6 @@
 
     <delete id="deleteByPrimaryKey" >
         delete from ${modelInfo.dbTableName}
-        from ${modelInfo.dbTableName}
         <#if (modelInfo.primaryKeys?size>0)>
         where
         <#list modelInfo.primaryKeys as primaryKey>
@@ -47,7 +46,6 @@
     <#if (modelInfo.primaryKeys?size==1)>
     <delete id="deleteByPrimaryKeys" >
         delete from ${modelInfo.dbTableName}
-        from ${modelInfo.dbTableName}
         <#list modelInfo.primaryKeys as primaryKey>
         where <foreach collection="primaryKeys" item = "primaryKey" separator=" or " >${primaryKey.dbFieldName} = <@mapperEl "primaryKey," + "jdbcType=" + primaryKey.dbType /></foreach>
         </#list>
@@ -103,7 +101,7 @@
         </#if>
     </update>
 
-    <update id="updateByPrimaryKey" parameterType="com.cqut.model.ChargeStandard" >
+    <update id="updateByPrimaryKey" parameterType="${modelInfo.packageName}.${modelInfo.modelName}" >
         update ${modelInfo.dbTableName}
         set
         <trim suffixOverrides="," >
@@ -142,10 +140,10 @@
         </if>
     </select>
 
-    <select id="loadMaps" resultMap="java.util.HashMap">
+    <select id="loadMaps" resultType="java.util.HashMap">
         select
         <if test="parameters != null">
-        ${r"${parameters}"}
+         ${r"${parameters}"}
         </if>
         <if test="parameters == null">
             *
@@ -196,7 +194,7 @@
     </#if>
     </select>
 
-    <select id="findMap" resultMap="java.util.HashMap" >
+    <select id="findMap" resultType="java.util.HashMap" >
         select
         <if test="parameters != null">
             ${r"${parameters}"}
