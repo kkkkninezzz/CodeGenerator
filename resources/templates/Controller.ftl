@@ -86,7 +86,7 @@ public class ${className} {
     <#-- 如果是单主键则生成批量删除 -->
     <#if (modelInfo.primaryKeys?size==1)>
     @RequestMapping(value = "/deletes", method = RequestMethod.DELETE)
-    public ResponseEntity<String> deletes(@RequestParam("primaryKeys[]") <#list modelInfo.primaryKeys as primaryKey>${primaryKey.javaType.simpleName}[] primaryKeys</#list>) {
+    public ResponseEntity<String> deletes(@RequestParam("primaryKeys") <#list modelInfo.primaryKeys as primaryKey>${primaryKey.javaType.simpleName}[] primaryKeys</#list>) {
         return ResponseUtil.getResEntityForDel(${serviceName}.batchDelete(primaryKeys));
     }
     </#if>
