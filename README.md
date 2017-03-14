@@ -3,8 +3,9 @@ ssm框架的代码生成器，根据数据库表生成model、dao、mapper.xml�
 
 ## 如何使用
 1.`git clone ` 仓库<br/>
-2.导入`IDEA`<br/>
-3.修改`resources/config.properties` ，比如修改jdbc相关配置<br/>
+2.使用JDK版本1.8及以上
+3.导入`IDEA`<br/>
+4.修改`resources/config.properties` ，比如修改jdbc相关配置<br/>
 ```javascript
 url=your url
 username=your name
@@ -34,5 +35,5 @@ private static void addGenerators(ICodeGeneratorService codeGeneratorService) {
 ```
 ## 可能会继续实现
 1.打包为jar<br/>
-2.增加日志输出<br/>
+2.增加日志输出（已完成）<br/>
 3.兼容Oracle、SQL Server<br/>
