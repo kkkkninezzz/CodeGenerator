@@ -8,15 +8,19 @@ import cn.makisekurisu.codeGenerator.service.database.IDataBaseService;
 import cn.makisekurisu.util.StringUtil;
 import cn.makisekurisu.util.TypeUtil;
 import org.apache.ibatis.type.JdbcType;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
  * Created by ym on 2017/2/19 0019.
  */
 public class DataBaseService implements IDataBaseService {
+    private static Logger logger = LogManager.getLogger(LogManager.ROOT_LOGGER_NAME);
 
     @Override
     public List<ModelInfo> loadModelInfos(DataBaseConfig dataBaseConfig, CodeGeneratorConfig codeGeneratorConfig) {
@@ -27,6 +31,18 @@ public class DataBaseService implements IDataBaseService {
         ResultSet tableRs = null;
         List<ModelInfo> modelInfos = null;
         try {
+            logger.info("-----------获取数据库表开始----------");
+
+            logger.info("驱动类: {}", dataBaseConfig.getDriverClassName());
+            logger.info("数据库url: {}", dataBaseConfig.getUrl());
+            logger.info("数据库用户名: {}", dataBaseConfig.getUsername());
+            logger.info("数据库密码: {}", dataBaseConfig.getPassword());
+
+            logger.info("TableCatalog: {}", dataBaseConfig.getTableCatalog());
+            logger.info("SchemaPattern: {}", dataBaseConfig.getSchemaPattern());
+            logger.info("TableNamePattern: {}", dataBaseConfig.getTableNamePattern());
+            logger.info("TableTypes: {}", dataBaseConfig.getTableTypes());
+
             connection = dataBaseConnection.getConnection();
             // 获取此连接对象所连接的数据库的元数据
             DatabaseMetaData databaseMetaData = connection.getMetaData();
@@ -34,12 +50,23 @@ public class DataBaseService implements IDataBaseService {
             tableRs = databaseMetaData.getTables(dataBaseConfig.getTableCatalog(), dataBaseConfig.getSchemaPattern(),
                     dataBaseConfig.getTableNamePattern(), dataBaseConfig.getTableTypeArray());
 
+
             modelInfos = new ArrayList<ModelInfo>();
             String modelPackageName = codeGeneratorConfig.getCompleteModelPackageName();
+
+            int tableCount = 0;
+            logger.info("开始处理数据库表: ");
             while(tableRs.next()) {
+                tableCount++;
+
                 String tableName = tableRs.getString(TABLE_NAME);
-                if(!codeGeneratorConfig.isTableNeedGenerate(tableName))
+
+                logger.info("表名: {}", tableName);
+
+                if(!codeGeneratorConfig.isTableNeedGenerate(tableName)) {
+                    logger.info("{}表不需要生成代码", tableName);
                     continue;
+                }
 
                 ModelInfo modelInfo = new ModelInfo();
                 modelInfo.setPackageName(modelPackageName);
@@ -56,11 +83,16 @@ public class DataBaseService implements IDataBaseService {
 
                 modelInfos.add(modelInfo);
             }
+
+
+            logger.info(String.format("共获取%d张表，实际处理%d张表", tableCount, modelInfos.size()));
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             dataBaseConnection.closeAll(tableRs, null, connection);
         }
+
+        logger.info("-----------获取数据库表结束----------");
 
         return modelInfos;
     }

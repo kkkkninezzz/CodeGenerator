@@ -28,16 +28,6 @@ public class DtoGenerator extends JavaBeanGenerator {
         return configLoader.getCodeGeneratorConfig().getDtoFlag() && modelInfos!= null && !modelInfos.isEmpty();
     }
 
-    private List<ClassFileInfo> createDtoClassFiles(List<ModelInfo> modelInfos, CodeGeneratorConfig config) {
-        List<ClassFileInfo> classFileInfos = new ArrayList<ClassFileInfo>();
-
-        for(ModelInfo modelInfo : modelInfos) {
-            classFileInfos.add(toClassFileInfo(modelInfo, config));
-        }
-
-        return classFileInfos;
-    }
-
     protected ClassFileInfo toClassFileInfo(ModelInfo modelInfo, CodeGeneratorConfig config) {
         ClassFileInfo classFileInfo = new ClassFileInfo();
 
