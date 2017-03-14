@@ -3,7 +3,7 @@ ssm框架的代码生成器，根据数据库表生成model、dao、mapper.xml�
 
 ## 如何使用
 1.`git clone ` 仓库<br/>
-2.使用JDK版本1.8及以上
+2.使用`JDK1.8`及以上<br />
 3.导入`IDEA`<br/>
 4.修改`resources/config.properties` ，比如修改jdbc相关配置<br/>
 ```javascript
