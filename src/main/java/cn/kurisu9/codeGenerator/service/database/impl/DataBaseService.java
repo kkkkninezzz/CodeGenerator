@@ -75,7 +75,7 @@ public class DataBaseService implements IDataBaseService {
                 modelInfo.setComment(tableRs.getString(REMARKS));
 
                 // 默认处理该表的所有列
-                List<FieldInfo> fieldInfos = handleColumns(databaseMetaData.getColumns(null, dataBaseConfig.getSchemaPattern(), tableName, "%"));
+                List<FieldInfo> fieldInfos = handleColumns(databaseMetaData.getColumns(null, dataBaseConfig.getSchemaPattern(), tableName, "%"), codeGeneratorConfig);
                 modelInfo.setFieldInfos(fieldInfos);
 
                 // 处理该表的主键字段
@@ -146,7 +146,7 @@ public class DataBaseService implements IDataBaseService {
     /**
      * 处理列
      * */
-    private List<FieldInfo> handleColumns(ResultSet columnRS) throws SQLException {
+    private List<FieldInfo> handleColumns(ResultSet columnRS, CodeGeneratorConfig codeGeneratorConfig) throws SQLException {
         List<FieldInfo> fieldInfos = new ArrayList<FieldInfo>();
 
         while (columnRS.next()) {
@@ -158,7 +158,7 @@ public class DataBaseService implements IDataBaseService {
 
             JdbcType jdbcType = JdbcType.forCode(columnRS.getInt(DATA_TYPE));
             fieldInfo.setDbType(jdbcType.toString());
-            fieldInfo.setJavaType(TypeUtil.getJavaTypeByJdbcType(jdbcType));
+            fieldInfo.setJavaType(TypeUtil.getJavaTypeByJdbcType(jdbcType, codeGeneratorConfig.isNeedWrappedType()));
 
             fieldInfo.setIsNotNull(columnRS.getInt(NULLABLE) == DatabaseMetaData.columnNoNulls);
 

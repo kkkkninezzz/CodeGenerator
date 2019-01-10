@@ -3,7 +3,6 @@ package cn.kurisu9.codeGenerator.config;
 import cn.kurisu9.codeGenerator.bean.codeFile.CodeFileInfo;
 import cn.kurisu9.util.StringUtil;
 
-import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -36,6 +35,11 @@ public class CodeGeneratorConfig {
      * 源代码保存的路径
      * */
     private String savePathForSourceCode;
+
+    /**
+     * 在生成字段类型时，是否使用包装类型
+     * */
+    private boolean needWrappedType;
 
     /**
      * 是否创建model层
@@ -171,6 +175,14 @@ public class CodeGeneratorConfig {
         // TODO
         //this.savePathForSourceCode = savePath + File.separator + "src";
         this.savePathForSourceCode = savePath;
+    }
+
+    public boolean isNeedWrappedType() {
+        return needWrappedType;
+    }
+
+    public void setNeedWrappedType(boolean needWrappedType) {
+        this.needWrappedType = needWrappedType;
     }
 
     public boolean getModelFlag() {

@@ -2,6 +2,7 @@ package cn.kurisu9.util;
 
 import org.apache.ibatis.type.JdbcType;
 
+import java.math.BigDecimal;
 import java.net.URL;
 import java.sql.Array;
 import java.sql.Clob;
@@ -20,7 +21,15 @@ import java.util.regex.Pattern;
 public class TypeUtil {
     private TypeUtil() {}
 
-    private static Map<JdbcType, Class<?>> javaTypes = new HashMap<JdbcType, Class<?>>();
+    /**
+     * 基础类型
+     * */
+    private static Map<JdbcType, Class<?>> javaTypes = new HashMap<>();
+
+    /**
+     * 包装类型
+     * */
+    private static Map<JdbcType, Class<?>> javaWrapperTypes = new HashMap<>();
 
     /**
      * 用于匹配是否是lang包下的类
@@ -32,55 +41,55 @@ public class TypeUtil {
      * */
     private static Set<Class<?>> baseTypes = new HashSet<>();
 
-    /*
+
     static {
-        javaTypes.put(JdbcType.CHAR, String.class);
-        javaTypes.put(JdbcType.VARCHAR, String.class);
-        javaTypes.put(JdbcType.LONGNVARCHAR, String.class);
-        javaTypes.put(JdbcType.LONGVARCHAR, String.class);
+        javaWrapperTypes.put(JdbcType.CHAR, String.class);
+        javaWrapperTypes.put(JdbcType.VARCHAR, String.class);
+        javaWrapperTypes.put(JdbcType.LONGNVARCHAR, String.class);
+        javaWrapperTypes.put(JdbcType.LONGVARCHAR, String.class);
 
-        javaTypes.put(JdbcType.NUMERIC, BigDecimal.class);
-        javaTypes.put(JdbcType.DECIMAL, BigDecimal.class);
+        javaWrapperTypes.put(JdbcType.NUMERIC, BigDecimal.class);
+        javaWrapperTypes.put(JdbcType.DECIMAL, BigDecimal.class);
 
-        javaTypes.put(JdbcType.BIT, Boolean.class);
-        javaTypes.put(JdbcType.BOOLEAN, Boolean.class);
+        javaWrapperTypes.put(JdbcType.BIT, Boolean.class);
+        javaWrapperTypes.put(JdbcType.BOOLEAN, Boolean.class);
 
-        javaTypes.put(JdbcType.TINYINT, Byte.class);
+        javaWrapperTypes.put(JdbcType.TINYINT, Byte.class);
 
-        javaTypes.put(JdbcType.SMALLINT, Short.class);
+        javaWrapperTypes.put(JdbcType.SMALLINT, Short.class);
 
-        javaTypes.put(JdbcType.INTEGER, Integer.class);
+        javaWrapperTypes.put(JdbcType.INTEGER, Integer.class);
 
-        javaTypes.put(JdbcType.BIGINT, Long.class);
+        javaWrapperTypes.put(JdbcType.BIGINT, Long.class);
 
-        javaTypes.put(JdbcType.REAL, Float.class);
+        javaWrapperTypes.put(JdbcType.REAL, Float.class);
 
-        javaTypes.put(JdbcType.FLOAT, Double.class);
-        javaTypes.put(JdbcType.DOUBLE, Double.class);
+        javaWrapperTypes.put(JdbcType.FLOAT, Double.class);
+        javaWrapperTypes.put(JdbcType.DOUBLE, Double.class);
 
-        javaTypes.put(JdbcType.BINARY, byte[].class);
-        javaTypes.put(JdbcType.VARBINARY, byte[].class);
-        javaTypes.put(JdbcType.LONGVARBINARY, byte[].class);
-        javaTypes.put(JdbcType.BLOB, byte[].class);
+        javaWrapperTypes.put(JdbcType.BINARY, byte[].class);
+        javaWrapperTypes.put(JdbcType.VARBINARY, byte[].class);
+        javaWrapperTypes.put(JdbcType.LONGVARBINARY, byte[].class);
+        javaWrapperTypes.put(JdbcType.BLOB, byte[].class);
 
-        javaTypes.put(JdbcType.DATE, Date.class);
-        javaTypes.put(JdbcType.TIME, Date.class);
-        javaTypes.put(JdbcType.TIMESTAMP, Date.class);
+        javaWrapperTypes.put(JdbcType.DATE, Date.class);
+        javaWrapperTypes.put(JdbcType.TIME, Date.class);
+        javaWrapperTypes.put(JdbcType.TIMESTAMP, Date.class);
 
-        javaTypes.put(JdbcType.CLOB, Clob.class);
+        javaWrapperTypes.put(JdbcType.CLOB, Clob.class);
 
-        javaTypes.put(JdbcType.ARRAY, Array.class);
+        javaWrapperTypes.put(JdbcType.ARRAY, Array.class);
 
-        javaTypes.put(JdbcType.DISTINCT, null);
+        javaWrapperTypes.put(JdbcType.DISTINCT, null);
 
-        javaTypes.put(JdbcType.STRUCT, Struct.class);
+        javaWrapperTypes.put(JdbcType.STRUCT, Struct.class);
 
-        javaTypes.put(JdbcType.REF, Ref.class);
+        javaWrapperTypes.put(JdbcType.REF, Ref.class);
 
-        javaTypes.put(JdbcType.DATALINK, URL.class);
+        javaWrapperTypes.put(JdbcType.DATALINK, URL.class);
 
     }
-    */
+
     static {
         javaTypes.put(JdbcType.CHAR, String.class);
         javaTypes.put(JdbcType.VARCHAR, String.class);
@@ -142,8 +151,15 @@ public class TypeUtil {
 
     /**
      * 获取mybatis的jdbcType对应的java类型
+     *
+     * @param jdbcType jdbc的类型
+     * @param isWrapped 是否获取包装类型
      * */
-    public static Class<?> getJavaTypeByJdbcType(JdbcType jdbcType) {
+    public static Class<?> getJavaTypeByJdbcType(JdbcType jdbcType, boolean isWrapped) {
+        if (isWrapped) {
+            return javaWrapperTypes.get(jdbcType);
+        }
+
         return javaTypes.get(jdbcType);
     }
 
